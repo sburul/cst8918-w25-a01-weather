@@ -1,8 +1,8 @@
 # base node image
-FROM node:lts-alpine as base
+FROM node:lts-alpine AS base
 
 # set for base and all layer that inherit from it
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 # Install openssl for Prisma
 # RUN apk -U add --update-cache openssl sqlite
@@ -16,7 +16,7 @@ chown -R student:student /cst8918-a01
 EOT
 
 # Install all node_modules, including dev dependencies
-FROM base as deps
+FROM base AS deps
 
 WORKDIR /cst8918-a01
 
@@ -24,7 +24,7 @@ ADD package.json ./
 RUN npm install --include=dev
 
 # Setup production node_modules
-FROM base as production-deps
+FROM base AS production-deps
 
 WORKDIR /cst8918-a01
 
@@ -33,7 +33,7 @@ ADD package.json ./
 RUN npm prune --omit=dev
 
 # Build the app
-FROM base as build
+FROM base AS build
 
 WORKDIR /cst8918-a01
 
